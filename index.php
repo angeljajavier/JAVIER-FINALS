@@ -25,6 +25,7 @@
                     <i class="fa fa-store"></i>
                     Learn IT Easy Online Shop
                 </h1>
+                <a href="registration.php" span class="badge badge-light"></i>Registration</a>
             </div>
             <div class="col-2 text-right">
                 <a href="cart.php" class="btn btn-primary">
