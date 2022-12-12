@@ -1,7 +1,21 @@
 <?php
     session_start();
-    require_once("dataset.php");    
+   // require_once("dataset.php");  
+   
+   require("function.php");
 
+   $con = openConnection();
+    /*
+   $strSql = "SELECT * FROM tbl_products";
+   $arrProd = mysqli_query($con, $strSql);
+
+   foreach ($arrProd as $key => $value) {
+         $products = $value;
+   } */
+
+   $sql = 'SELECT * FROM tbl_products';
+   $result = mysqli_query($con, $sql);
+   $arrProd = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $_SESSION['total_price'] = 0;
 
     if(isset($_POST['update']) && isset($_POST['id']) && isset($_POST['size']) && $_POST['quantity']) {
@@ -31,18 +45,36 @@
 <body>
     <div class="container">        
         <div class="row mt-5">
-            <div class="col-10">
+            <div class="col-8">
                 <h1>
                     <i class="fa fa-store"></i>
                     Learn IT Easy Online Shop
                 </h1>
             </div>
-            <div class="col-2 text-right">
-                <a href="cart.php" class="btn btn-primary">
-                    <i class="fa fa-shopping-cart"></i>
-                    Cart <span class="badge badge-light"><?php echo $_SESSION['cart_count']; ?></span>
-                </a>
+            <div class = "mr-1">
+                    <a href="validateCart.php" class="btn btn-primary">
+                        <i class="fa fa-shopping-cart"></i> Cart
+                        <span class="badge badge-light">                        
+                        <?php echo $_SESSION['cart_count']; ?>
+                        </span>
+                    </a>
+                </div>
+            <div>
+                <?php if (isset($_SESSION['customerName'])){ ?>
+            <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i>
+                    <?php echo $_SESSION['customerName'];  ?>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item text-danger" href="signout.php">log out</a>
+                  </div>
             </div>
+                <?php }else{ ?> 
+                    <a href="login.php" class="btn btn-primary text-white" >
+                        Sign In
+                    </a>
+                <?php } ?>
+            </div>   
             <div class="col-12">
                 <hr>
             </div>
@@ -67,19 +99,19 @@
                                 <?php foreach($_SESSION['cart'] as $id => $sizes): ?>
                                     <?php foreach($sizes as $size => $quantity): ?>
                                         <?php
-                                            $total = $products[$id]['price'] * $quantity;
+                                            $total = $arrProd[$id]['price'] * $quantity;
                                             $_SESSION['total_price'] += $total;
                                         ?>
                                         <tr>
-                                            <td><img class="img-thumbnail" src="img/<?php echo $products[$id]['photo1'] ?>" style="height: 50px" /></td>
-                                            <td><?php echo $products[$id]['name'] ?></td>
+                                            <td><img class="img-thumbnail" src="uploads/<?php echo $arrProd[$id]['photo1'] ?>" style="height: 50px" /></td>
+                                            <td><?php echo $arrProd[$id]['name']?></td>
                                             <td><?php echo $size ?></td>
                                             <td>
                                                 <input type="hidden" name="id[]" value="<?php echo $id ?>" />
                                                 <input type="hidden" name="size[]" value="<?php echo $size ?>" />
                                                 <input type="number" name="quantity[]" class="form-control text-center" value="<?php echo $quantity ?>" placeholder="0" min="1" max="100" required="" />
                                             </td>
-                                            <td class="text-right">₱ <?php echo number_format($products[$id]['price'], 2); ?></td>
+                                            <td class="text-right">₱ <?php echo number_format($arrProd[$id]['price'], 2); ?></td>
                                             <td class="text-right">₱ <?php echo number_format($total, 2); ?></td>
                                             <td class="text-right">
                                                 <a href="remove.php?k=<?php echo $id ?>&s=<?php echo $size ?>&q=<?php echo $quantity ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>

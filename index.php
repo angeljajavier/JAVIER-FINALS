@@ -1,6 +1,11 @@
 <?php
     session_start();    
-    require_once("dataset.php");
+   // require_once("dataset.php");
+   require("function.php");
+
+   $con = openConnection();
+   $strSql = "SELECT * FROM tbl_products";
+   $products = mysqli_query($con, $strSql);
 
     if(!isset($_SESSION['cart_count']))
         $_SESSION['cart_count'] = 0;
@@ -19,23 +24,34 @@
 </head>
 <body>
     <div class="container">
-        <div class="row mt-5">
-            <div class="col-10">
-                <h1>
-                    <i class="fa fa-store"></i>
-                    Learn IT Easy Online Shop
-                </h1>
-                <a href="registration.php" span class="badge badge-light"></i>Registration</a>
+    <div class="row mt-5">
+            <div class="col-8">
+                <h1><i class="fa fa-store"></i> Learn IT Easy Online Shop</h1>
             </div>
-            <div class="col-2 text-right">
-                <a href="cart.php" class="btn btn-primary">
-                    <i class="fa fa-shopping-cart"></i>
-                    Cart <span class="badge badge-light"><?php echo $_SESSION['cart_count']; ?></span>
-                </a>
+            <div class = "mr-1">
+                    <a href="validateCart.php" class="btn btn-primary">
+                        <i class="fa fa-shopping-cart"></i> Cart
+                        <span class="badge badge-light">                        
+                        <?php echo $_SESSION['cart_count']; ?>
+                        </span>
+                    </a>
+                </div>
+            <div>
+                <?php if (isset($_SESSION['customerName'])){ ?>
+            <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i>
+                    <?php echo $_SESSION['customerName'];  ?>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item text-danger" href="signout.php">log out</a>
+                  </div>
             </div>
-            <div class="col-12">
-                <hr>
-            </div>
+                <?php }else{ ?> 
+                    <a href="login.php" class="btn btn-primary text-white" >
+                        Sign In
+                    </a>
+                <?php } ?>
+            </div>            
         </div>
         <div class="row">
             <?php if(isset($products)): ?>
@@ -44,8 +60,8 @@
                         <div class="product-grid2 card">
                             <div class="product-image2">
                                 <a href="details.php?k=<?php echo $id; ?>">
-                                    <img class="pic-1" src="img/<?php echo $product['photo1']; ?>">
-                                    <img class="pic-2" src="img/<?php echo $product['photo2']; ?>">
+                                    <img class="pic-1" src="uploads/<?php echo $product['photo1']; ?>">
+                                    <img class="pic-2" src="uploads/<?php echo $product['photo2']; ?>">
                                 </a>                        
                                 <a class="add-to-cart" href="details.php?k=<?php echo $id; ?>">
                                     <i class="fa fa-cart-plus"></i> Add to cart

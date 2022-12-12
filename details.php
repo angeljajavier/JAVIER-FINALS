@@ -1,16 +1,28 @@
 <?php
     session_start();
-    require_once("dataset.php");
+   require("function.php");
+   
+   $con = openConnection();
+   $id = mysqli_real_escape_string($con, $_GET['k']);
 
-    if(isset($_POST['process'])) {
-        if(isset($_SESSION['cart'][$_POST['id']][$_POST['size']]))
-            $_SESSION['cart'][$_POST['id']][$_POST['size']] += $_POST['quantity'];
-        else
-            $_SESSION['cart'][$_POST['id']][$_POST['size']] = $_POST['quantity'];
-            
-        $_SESSION['cart_count'] += $_POST['quantity'];
-        header("location: confirm.php");
-    }
+   $sql = 'SELECT * FROM tbl_products';
+   $result = mysqli_query($con, $sql);
+   $arrProd = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+
+        if(isset($_SESSION['customerID'])){
+            if(isset($_POST['process'])) {
+                if(isset($_SESSION['cart'][$_POST['id']][$_POST['size']]))
+                    $_SESSION['cart'][$_POST['id']][$_POST['size']] += $_POST['quantity'];
+                else
+                    $_SESSION['cart'][$_POST['id']][$_POST['size']] = $_POST['quantity'];
+                    
+                $_SESSION['cart_count'] += $_POST['quantity'];
+                header("location: confirm.php");
+            }
+        }else{
+            header("location: login.php");
+        }
 ?>
 
 <!DOCTYPE html>
@@ -27,36 +39,51 @@
 <body>
     <div class="container">
         <div class="row mt-5">
-            <div class="col-10">
+            <div class="col-8">
                 <h1>
                     <i class="fa fa-store"></i>
                     Learn IT Easy Online Shop
                 </h1>
             </div>
-            <div class="col-2 text-right">
-                <a href="cart.php" class="btn btn-primary">
-                    <i class="fa fa-shopping-cart"></i>
-                    Cart <span class="badge badge-light"><?php echo $_SESSION['cart_count']; ?></span>
-                </a>
+            <div class = "mr-1">
+                    <a href="validateCart.php" class="btn btn-primary">
+                        <i class="fa fa-shopping-cart"></i> Cart
+                        <span class="badge badge-light">                        
+                        <?php echo $_SESSION['cart_count']; ?>
+                        </span>
+                    </a>
+                </div>
+            <div>
+                <?php if (isset($_SESSION['customerName'])){ ?>
+            <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i>
+                    <?php echo $_SESSION['customerName'];  ?>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item text-danger" href="signout.php">log out</a>
+                  </div>
             </div>
-            <div class="col-12">
-                <hr>
-            </div>
+                <?php }else{ ?> 
+                    <a href="login.php" class="btn btn-primary text-white" >
+                        Sign In
+                    </a>
+                <?php } ?>
+            </div>   
         </div>
         <div class="row">
-            <?php if(isset($_GET['k']) && ($_GET['k'] < count($products))): ?>                
+            <?php if(isset($arrProd[$id]['id'])): ?>                
                     <div class="col-12 col-sm-12 col-md-4 col-lg-4 mb-4">                        
                         <div class="product-image2">                            
-                            <img class="pic-1 w-100" src="img/<?php echo $products[$_GET['k']]['photo1']; ?>">                                                    
+                            <img class="pic-1 w-100" src="uploads/<?php echo $arrProd[$id]['photo1']; ?>">                                              
                         </div>
                     </div>
                     <div class="col-12 col-sm-12 col-md-8 col-lg-8 mb-4">
                         <form method="post">
                             <div class="product-content">
                                 <h3 class="title">
-                                    <?php echo $products[$_GET['k']]['name']; ?> <span class="badge badge-dark">₱ <?php echo $products[$_GET['k']]['price']; ?></span>
+                                    <?php echo $arrProd[$id]['name']; ?> <span class="badge badge-dark">₱ <?php echo $arrProd[$id]['price']; ?></span>
                                 </h3>                        
-                                <p><?php echo $products[$_GET['k']]['description']; ?></p>
+                                <p><?php echo $arrProd[$id]['description']; ?></p>
                                 <hr>
 
                                 <input type="hidden" name="id" value="<?php echo $_GET['k']; ?>">

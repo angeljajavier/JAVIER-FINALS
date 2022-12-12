@@ -1,82 +1,101 @@
-<!DOCTYPE html>
+<?php 
+        require('function.php');
+        session_start();
+        $con = openConnection();
+?>
+
+<!doctype html>
 <html lang="en">
-<head>
-	<title>Login V16</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="css/util.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
-<!--===============================================================================================-->
-</head>
-<body>
+  <head>
+  	<title>Login Form</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	
-	<div class="limiter">
-		<div class="container-login100" style="background-image: url('img/bg-01.jpg');">
-			<div class="wrap-login100 p-t-30 p-b-50">
-				<span class="login100-form-title p-b-41">
-					Account Login
-				</span>
-				<form class="login100-form validate-form p-b-33 p-t-5">
+	<link rel="stylesheet" href="css/login.css">
 
-					<div class="wrap-input100 validate-input" data-validate = "Enter username">
-						<input class="input100" type="text" name="username" placeholder="User name">
-						<span class="focus-input100" data-placeholder="&#xe82a;"></span>
-					</div>
+	</head>
+	<body class="img js-fullheight" style="background-image: url(img/bg.jpg);">
+        <?php 
+                if (isset($_POST['loginbtn'])) {
+                    $password = $_POST['password'];
+                    $email = $_POST['email'];
+            
+                    $email = stripcslashes($email);
+                    $password= stripslashes($password);
+            
+                    $email = mysqli_real_escape_string($con, $email);
+                    $password = mysqli_real_escape_string($con, $password);
+            
+                    $password = md5($password);
+            
+                    $strSql = "SELECT * FROM tbl_customer
+                            WHERE emailAddress ='$email'
+                            AND password = '$password'
+                            ";
+            
+                    if ($rsLogin = mysqli_query($con, $strSql)) {
+                        if (mysqli_num_rows($rsLogin)>0) {
+                            echo 'Welcome to the system';
+                            foreach ($rsLogin as $key => $value) {
+                                $_SESSION['customerID'] = $value['customerID'];
+                                $_SESSION['customerName'] = $value['name'];
+                                header('location: index.php');
+                            }
+                        }else
+                            echo '<div class="alert alert-danger text-center" role="alert">
+                                    Invalid Account/Password
+                                </div>';
+                    }
+                    else
+                        echo "could not execute your request";
+                }
+        ?>
 
-					<div class="wrap-input100 validate-input" data-validate="Enter password">
-						<input class="input100" type="password" name="pass" placeholder="Password">
-						<span class="focus-input100" data-placeholder="&#xe80f;"></span>
-					</div>
-
-					<div class="container-login100-form-btn m-t-32">
-						<button class="login100-form-btn">
-							Login
-						</button>
-					</div>
-
-				</form>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">SIGN IN</h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+		      	<h3 class="mb-4 text-center">Have an account?</h3>
+		      	<form method="post" class="signin-form">
+		      		<div class="form-group">
+		      			<input name="email" type="email" class="form-control" placeholder="Username" required>
+		      		</div>
+	            <div class="form-group">
+	              <input id="password-field" name="password" type="password" class="form-control" placeholder="Password" required>
+	              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+	            </div>
+	            <div class="form-group">
+	            	<button type="submit" name="loginbtn" class="form-control btn btn-primary submit px-3">Sign In</button>
+	            </div>
+	            <div class="form-group d-md-flex">
+	            </div>
+	          </form>
+	          <p class="w-100 text-center">&mdash; Register or Admin? &mdash;</p>
+	          <div class="social d-flex text-center">
+	          	<a href="registrationForm.php" class="px-2 py-2 mr-md-1 rounded"><span class="ion-logo-facebook mr-2"></span> Register</a>
+	          	<a href="loginAdmin.php" class="px-2 py-2 ml-md-1 rounded"><span class="ion-logo-twitter mr-2"></span> Admin</a>
+	          </div>
+		      </div>
+				</div>
 			</div>
 		</div>
-	</div>
-	
+	</section>
 
-	<div id="dropDownSelect1"></div>
-	
-<!--===============================================================================================-->
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/bootstrap/js/popper.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/daterangepicker/moment.min.js"></script>
-	<script src="vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/countdowntime/countdowntime.js"></script>
-<!--===============================================================================================-->
-	<script src="js/main.js"></script>
+	<script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
 
-</body>
+	</body>
 </html>
+

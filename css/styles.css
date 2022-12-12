@@ -30,3 +30,13 @@
 .product-grid2 .price{color:#303030;font-size:15px}
 @media screen and (max-width:990px){.product-grid2{margin-bottom:30px}
 }
+
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+    font-size: 1rem;
+    line-height: 2.15;
+    padding-left: .75em;
+    padding-right: .75em;
+    }
+    .card-registration .select-arrow {
+    top: 13px;
+    }

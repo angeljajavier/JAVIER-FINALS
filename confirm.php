@@ -16,21 +16,36 @@
 <body>
     <div class="container">
         <div class="row mt-5">
-            <div class="col-10">
+        <div class="col-8">
                 <h1>
                     <i class="fa fa-store"></i>
                     Learn IT Easy Online Shop
                 </h1>
             </div>
-            <div class="col-2 text-right">
-                <a href="cart.php" class="btn btn-primary">
-                    <i class="fa fa-shopping-cart"></i>
-                    Cart <span class="badge badge-light"><?php echo $_SESSION['cart_count']; ?></span>
-                </a>
+            <div class = "mr-1">
+                    <a href="validateCart.php" class="btn btn-primary">
+                        <i class="fa fa-shopping-cart"></i> Cart
+                        <span class="badge badge-light">                        
+                        <?php echo $_SESSION['cart_count']; ?>
+                        </span>
+                    </a>
+                </div>
+            <div>
+                <?php if (isset($_SESSION['customerName'])){ ?>
+            <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i>
+                    <?php echo $_SESSION['customerName'];  ?>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item text-danger" href="signout.php">log out</a>
+                  </div>
             </div>
-            <div class="col-12">
-                <hr>
-            </div>
+                <?php }else{ ?> 
+                    <a href="login.php" class="btn btn-primary text-white" >
+                        Sign In
+                    </a>
+                <?php } ?>
+            </div>   
         </div>
         <div class="row">
             <div class="col-12">
