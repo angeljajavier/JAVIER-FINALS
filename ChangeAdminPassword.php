@@ -95,7 +95,7 @@ if (isset($_POST['updateBtn'])) {
                     <ul class="navbar-nav ms-auto d-flex align-items-center">
                         <li>
                             <a class="profile-pic" href="#">
-                                <img src="plugins/images/users/varun.jpg" alt="user-img" width="36"
+                                <img src="plugins/images/users/paimon.jpg" alt="user-img" width="36"
                                     class="img-circle"><span class="text-white font-medium">Kyokie</span></a>
                         </li>
                     </ul>
@@ -160,13 +160,13 @@ if (isset($_POST['updateBtn'])) {
                     <!-- Column -->
                     <div class="col-lg-4 col-xlg-3 col-md-12">
                         <div class="white-box">
-                            <div class="user-bg"> <img width="100%" alt="user" src="plugins/images/large/img1.jpg">
+                            <div class="user-bg"> <img width="100%" alt="user" src="plugins/images/large/dva1.jpg">
                                 <div class="overlay-box">
                                     <div class="user-content">
-                                        <a href="javascript:void(0)"><img src="plugins/images/users/genu.jpg"
+                                        <a href="javascript:void(0)"><img src="plugins/images/users/dva.jpg"
                                                 class="thumb-lg img-circle" alt="img"></a>
-                                        <h4 class="text-white mt-2">Kyokie</h4>
-                                        <h5 class="text-white mt-2">AddmeonV@lo.com</h5>
+                                        <h4 class="text-white mt-2">angel</h4>
+                                        <h5 class="text-white mt-2">nerf-this.com</h5>
                                     </div>
                                 </div>
                             </div>
